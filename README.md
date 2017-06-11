@@ -1,6 +1,6 @@
 Arduino Compatible Kalman Filter
 ================================
-This is an NxN basic Kalman filter using an [Arduino Linear Algebra library](https://github.com/keithmgould/BasicLinearAlgebra).
+This is an NxN basic Kalman filter using the [Arduino Basic Linear Algebra library](https://github.com/keithmgould/BasicLinearAlgebra).
 
 It implements the algorithm directly as found in [An Introduction to the Kalman Filter](http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf).
 
