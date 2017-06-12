@@ -44,7 +44,8 @@ void setup() {
   Serial << "P: " <<  P << '\n';
 
   // Construct the filter
-  KalmanFilter<MYDIMN, MYDIMM> kf (dt, A, C, Q, R, P);
+  KalmanFilter<MYDIMN, MYDIMM> kf;
+  kf.BuildFilter(dt, A, C, Q, R, P);
 
   // List of noisy position measurements (y)
   float measurements [] = {

@@ -9,28 +9,29 @@ template<int DIMN, int DIMM>
 class KalmanFilter {
 
 public:
-
-  KalmanFilter(
-    double dt,
-    const Matrix<DIMN,DIMN>& A,
-    const Matrix<DIMM,DIMN>& C,
-    const Matrix<DIMN,DIMN>& Q,
-    const Matrix<DIMM,DIMM>& R,
-    const Matrix<DIMN,DIMN>& P
-  ) : dt(dt),
-      A(A),
-      C(C),
-      Q(Q),
-      R(R),
-      P0(P),
-      m(C.GetRowCount()),
-      n(A.GetRowCount()),
-      initialized(false),
-      I(A),
-      x_hat(n),
-      x_hat_new(n)
+  void BuildFilter(
+    double get_dt,
+    const Matrix<DIMN,DIMN>& get_A,
+    const Matrix<DIMM,DIMN>& get_C,
+    const Matrix<DIMN,DIMN>& get_Q,
+    const Matrix<DIMM,DIMM>& get_R,
+    const Matrix<DIMN,DIMN>& get_P
+  )
   {
+    dt = get_dt;
+    A = get_A;
+    C = get_C;
+    Q = get_Q;
+    R = get_R;
+    P0 = get_P;
+
+    m = C.GetRowCount();
+    n = A.GetRowCount();
+    initialized = false;
+    I = A;
     I.SetIdentity();
+    x_hat = n;
+    x_hat_new = n;
   }
 
   void init(double t0, const Matrix<DIMN,1>& x0) {
@@ -69,7 +70,7 @@ private:
   Matrix<DIMN, DIMN> P0;
   Matrix<DIMN, 1> K;
 
-    // System dimensions
+  // System dimensions
   int m, n;
 
   // Initial and current time
