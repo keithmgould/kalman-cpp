@@ -1,4 +1,5 @@
 // Taken from: http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
+
 #ifndef MYKALMAN
 #define MYKALMAN
 #include <BasicLinearAlgebra.h>
@@ -43,13 +44,34 @@ public:
   }
 
   void update(const Matrix<DIMM,1>& y) {
+    // =================================
+    // Prediction Phase
+
+    // project the state ahead
     Multiply(A,x_hat,x_hat_new);
+
+    // project the error covariance ahead
     P = A*P*(~A) + Q;
+
+    // =================================
+    // Correction Phase
+
+    // Compute the Kalman gain
     K = P*(~C)*(C*P*(~C) + R).Inverse();
+
+    // update the estimate
     x_hat_new += K * (y - C*x_hat_new);
+
+    // update the error covariance
     P = (I - K*C)*P;
+
+    //==================================
+    // prepare for next iteration
+
+    // iterate state estimation
     x_hat = x_hat_new;
 
+    // iterate time
     t += dt;
   }
 
