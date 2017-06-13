@@ -90,7 +90,7 @@ private:
   Matrix<DIMM, DIMM> R;
   Matrix<DIMN, DIMN> P;
   Matrix<DIMN, DIMN> P0;
-  Matrix<DIMN, 1> K;
+  Matrix<DIMN, DIMM> K;
 
   // System dimensions
   int m, n;
