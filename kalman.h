@@ -13,6 +13,7 @@ public:
   void BuildFilter(
     double get_dt,
     const Matrix<DIMN,DIMN>& get_A,
+    const Matrix<DIMN,1>& get_B,
     const Matrix<DIMM,DIMN>& get_C,
     const Matrix<DIMN,DIMN>& get_Q,
     const Matrix<DIMM,DIMM>& get_R,
@@ -21,6 +22,7 @@ public:
   {
     dt = get_dt;
     A = get_A;
+    B = get_B;
     C = get_C;
     Q = get_Q;
     R = get_R;
@@ -42,12 +44,12 @@ public:
     initialized = true;
   }
 
-  void update(const Matrix<DIMM,1>& y) {
+  void update(const Matrix<DIMM,1>& y, const float& u) {
     // =================================
     // Prediction Phase
 
     // project the state ahead
-    Multiply(A,x_hat,x_hat_new);
+    x_hat_new = A * x_hat + B * u;
 
     // project the error covariance ahead
     P = A*P*(~A) + Q;

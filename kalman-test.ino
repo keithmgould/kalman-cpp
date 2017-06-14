@@ -13,6 +13,7 @@ void setup() {
   double dt = 1.0/30; // Time step
 
   Matrix<MYDIMN,MYDIMN> A; // System dynamics matrix
+  Matrix<MYDIMN,1> B; // Input matrix
   Matrix<MYDIMM,MYDIMN> C; // Output matrix
   Matrix<MYDIMN,MYDIMN> Q; // Process noise covariance
   Matrix<MYDIMM,MYDIMM> R; // Measurement noise covariance
@@ -22,6 +23,9 @@ void setup() {
   A << 1, dt, 0,
        0, 1, dt,
        0, 0, 1;
+
+  // input matrix
+  B << 0, 0, 0;
 
   // just observe position
   C << 1, 0, 0;
@@ -38,6 +42,7 @@ void setup() {
        .1, 10, 100;
 
   Serial << "A: " <<  A << '\n';
+  Serial << "B: " <<  B << '\n';
   Serial << "C: " <<  C << '\n';
   Serial << "Q: " <<  Q << '\n';
   Serial << "R: " <<  R << '\n';
@@ -45,7 +50,7 @@ void setup() {
 
   // Construct the filter
   KalmanFilter<MYDIMN, MYDIMM> kf;
-  kf.BuildFilter(dt, A, C, Q, R, P);
+  kf.BuildFilter(dt, A, B, C, Q, R, P);
 
   // List of noisy position measurements (y)
   float measurements [] = {
@@ -110,7 +115,7 @@ void setup() {
   for(int i = 0; i < 45; i++) {
     t += dt;
     y << measurements[i];
-    kf.update(y);
+    kf.update(y, 0);
     Serial.print("t = ");
     Serial.print(t);
     Serial.print(", y[");
