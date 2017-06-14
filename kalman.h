@@ -16,7 +16,7 @@ public:
     const Matrix<DIMM,DIMN>& get_C,
     const Matrix<DIMN,DIMN>& get_Q,
     const Matrix<DIMM,DIMM>& get_R,
-    const Matrix<DIMN,DIMN>& get_P
+    const Matrix<DIMN,DIMN>& get_P0
   )
   {
     dt = get_dt;
@@ -24,13 +24,12 @@ public:
     C = get_C;
     Q = get_Q;
     R = get_R;
-    P0 = get_P;
+    P0 = get_P0;
 
     m = C.GetRowCount();
     n = A.GetRowCount();
     initialized = false;
-    I = A;
-    I.SetIdentity();
+    I = Identity<DIMN,DIMN,float>();
     x_hat = n;
     x_hat_new = n;
   }
@@ -84,11 +83,12 @@ private:
   double dt;
 
   // Matrices
-  Matrix<DIMN, DIMN> A;
-  Matrix<DIMM, DIMN> C;
-  Matrix<DIMN, DIMN> Q;
-  Matrix<DIMM, DIMM> R;
-  Matrix<DIMN, DIMN> P;
+  Matrix<DIMN, DIMN> A;   // system
+  Matrix<DIMN, 1>    B;   // input
+  Matrix<DIMM, DIMN> C;   // observation
+  Matrix<DIMN, DIMN> Q;   // Process noise covariance
+  Matrix<DIMM, DIMM> R;   // Measurement noise covariance
+  Matrix<DIMN, DIMN> P;   // Estimate error covariance
   Matrix<DIMN, DIMN> P0;
   Matrix<DIMN, DIMM> K;
 
