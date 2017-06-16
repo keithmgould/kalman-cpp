@@ -50,7 +50,7 @@ void setup() {
 
   // Construct the filter
   KalmanFilter<MYDIMN, MYDIMM> kf;
-  kf.BuildFilter(dt, A, B, C, Q, R, P);
+  kf.BuildFilter(A, B, C, Q, R, P);
 
   // List of noisy position measurements (y)
   float measurements [] = {
@@ -104,20 +104,15 @@ void setup() {
   // Best guess of initial states
   Matrix<MYDIMN, 1> x0;
   x0 << measurements[0], 0, -9.81;
-  kf.init(0, x0);
+  kf.init(x0);
 
   double t = 0;
   Matrix<MYDIMM, 1> y;
 
-  Serial.print("t = ");
-  Serial.print(t) ;
   Serial << ", x_hat[0]: " << ~kf.state() << '\n';
   for(int i = 0; i < 45; i++) {
-    t += dt;
     y << measurements[i];
     kf.update(y, 0);
-    Serial.print("t = ");
-    Serial.print(t);
     Serial.print(", y[");
     Serial.print(i);
     Serial.print("] = ");

@@ -11,7 +11,6 @@ class KalmanFilter {
 
 public:
   void BuildFilter(
-    double get_dt,
     const Matrix<DIMN,DIMN>& get_A,
     const Matrix<DIMN,1>& get_B,
     const Matrix<DIMM,DIMN>& get_C,
@@ -20,7 +19,6 @@ public:
     const Matrix<DIMN,DIMN>& get_P0
   )
   {
-    dt = get_dt;
     A = get_A;
     B = get_B;
     C = get_C;
@@ -36,11 +34,9 @@ public:
     x_hat_new = n;
   }
 
-  void init(double t0, const Matrix<DIMN,1>& x0) {
+  void init(const Matrix<DIMN,1>& x0) {
     x_hat = x0;
     P = P0;
-    this->t0 = t0;
-    t = t0;
     initialized = true;
   }
 
@@ -69,21 +65,12 @@ public:
     //==================================
     // prepare for next iteration
 
-    // iterate state estimation
     x_hat = x_hat_new;
-
-    // iterate time
-    t += dt;
   }
 
   Matrix<DIMN, 1> state() { return x_hat; }
-  double time() { return t; }
 
 private:
-
-  // Discrete time step
-  double dt;
-
   // Matrices
   Matrix<DIMN, DIMN> A;   // system
   Matrix<DIMN, 1>    B;   // input
@@ -96,9 +83,6 @@ private:
 
   // System dimensions
   int m, n;
-
-  // Initial and current time
-  double t0, t;
 
   // Is the filter initialized?
   bool initialized;
